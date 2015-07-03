@@ -1,0 +1,185 @@
+
+#                 * * * * * * * DESKNET * * * * * * *
+#                             desknet-0.1
+#                   Copyright (C) 2014 by John Slayton
+
+#This program is free software; you can redistribute it and/or modify it
+#under the terms of the GNU General Public License as published by the
+#Free Software Foundation; either version 3 of the License, or (at your
+#option) any later version.
+
+#This program is distributed in the hope that it will be useful, but
+#WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#General Public License for more details.
+
+#You should have received a copy of the GNU General Public License along
+#with this program; if not, write to the Free Software Foundation, Inc.,
+#51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+#Author's address as of 11.3.14 is 260 Sundance Ct, Azusa, CA 91792. */
+
+#  This is a script that gives an identifying event number to each board.  That number
+# is saved in a file on the hard drive so the Desknet program will know who is typing
+# on each line.
+  
+#!/bin/sh
+#stty intr ^- quit ^-
+
+clear
+
+if [ "${1}" = "--version" ] 
+then
+ flag='version'
+fi
+
+if [ "${1}" = "-v" ]
+then
+ flag='version'
+fi
+
+if [ "${flag}" = "version" ]
+then
+  printf  "
+
+desknet 0.1 
+Copyright (C) 2014 John Slayton
+
+License GPLv3+:  GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software:  You are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.\n"
+
+  exit
+
+# Prints usage if any argument other than --version, including --help
+elif [ "${1}" ]
+then
+  printf  "\n
+Usage:  desknet [options]
+
+Provides classroom activities for math facts, keyboarding, word 
+processing and self-assessment.
+
+  --help        This display
+  --version     Display Desknet version
+
+Send bug reports to juanslayton@dslextreme.com
+"
+exit
+fi
+  printf "\n\n\n Configure your keyboard network?";
+  printf "\n\n Yes or No";
+  printf "\n\n You MUST configure it the first time to run the program.";
+  declare query
+  while
+  [ "${query}" != "y" ] && [ "${query}" != "n" ]
+    do
+    read -a query -n 1 -s;
+    done
+
+if test $query == y
+  then
+
+  ar=(class1 class2 class3 class4 class5 class6 class7 class8 class9)
+  declare -i z 
+  z=1
+
+  clear
+  printf "\n\n\nPick the maximum number of keyboards in your system\n\n"
+  printf "A 20\n\n"
+  printf "B 30\n\n"
+  printf "C 40\n\n"
+
+  while
+  [ "${query}" != "a" ] && [ "${query}" != "b" ] && [ "${query}" != "c" ] && [ "${query}" != "A" ] && [ "${query}" != "B" ] && [ "${query}" != "C" ]  
+    do
+    read -a query -n 1 -s;
+    done
+
+  declare -i number
+  let number=0
+
+  if test $query == a
+    then
+    let number=2
+  fi
+  
+  if test $query == b
+    then
+    let number=3
+  fi
+  
+  if test $query == c
+    then
+    let number=4
+  fi
+
+  let limit=40
+
+  printf "$number" > /usr/local/etc/net_size
+  clear
+  printf "\n\n\nInstructions for Configuring $number Keyboards\n\n"
+
+  printf "     STEP 1:  Boot your computer with the wireless keyboard hub
+    _disconnected_.  When xwindow display comes up, plug in the hub with
+    all the recievers already plugged in."
+
+  printf "\n\n     STEP 2:  Your USB system has assigned each keyboard an 'event
+    number'.  You need to write down a list of these numbers.  You will find 
+    them in this file:  /proc/bus/input/devices.  If you are not using the Logitech
+    keyboard, each keyboard will likely have at least two event numbers, and possibly
+    more.  There will be a separate paragraph for each event number, so each of
+    your keyboards will probably be represented by two paragraphs. Looking at line 'H',
+    you want the first paragraph that shows 'kbd' and not 'mouse kbd'."
+
+  printf "\n\nWhen your list is ready, come back here, type 'configure' and hit 'return'.\n\n"
+    
+  while [ "$configure" != "configure" ]
+    do
+    read configure
+    done
+    
+  clear
+  printf "\n\nSTEP 3:  We have to tell the computer what line on the screen each
+    keyboard will print to.  Please enter below, first the number of a 
+    screen line, and then the number of an event from your list.  Type 123 
+    to exit Configuration."
+    
+  declare loop
+  let  loop=0
+  array=( 0 a b c d e f g h i j k l m n o p q r s t u v w x y z aa ab ac ad ae af ag ah ai aj ak al am an)
+  while [ "$loop" != "c" ]
+    do
+    printf "\n   Line Number:  "
+    declare -i line_number
+    let line_number=0
+    
+  while [ "$line_number" == "0" ] || [ "$line_number" -gt "$limit" ]
+    do
+      read line_number
+      if [ "$line_number" == "123" ]
+        then
+        line_number=0
+        break
+      fi
+      if [ "$line_number" -gt "$limit" ]
+        then
+        printf "\n  You can't have that many boards!"
+      fi
+    done
+      
+  if [ "$line_number" != "0" ]
+    then
+    printf "    Event Number:  "
+    declare -i event_number
+    read event_number
+    printf "/dev/input/event$event_number" > /usr/local/etc/events/buf${array[$line_number]}
+  else
+    loop=c
+  fi
+    done
+fi
+
+clear
+/usr/local/bin/dnet
+exit     
