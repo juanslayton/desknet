@@ -246,10 +246,6 @@ int uc[255];
      interpret next make as upper case. */
 int upper_case[41];
 
- /* This flag shows that program is waiting for student to enter an answer
-    to a math problem. */
-int waiting[41];
-
                            /* CHARACTER ARRAYS */
 
 char answ[41][21];
