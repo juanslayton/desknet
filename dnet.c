@@ -5847,8 +5847,14 @@ process()
                     scratch = TTF_RenderText_Solid(fnt30, "_", white);
                     SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);
                     SDL_FreeSurface(scratch);
-                    
-                         /* Second, increment the cursor and reprint.  */
+ 
+                         /* Second, reprint the original letter.  */ 
+                    z[0] = display_line[e][cursor[e]];
+                    scratch = TTF_RenderText_Solid(fnt30, &z[0], hue[e]);
+                    SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
+                    SDL_FreeSurface(scratch);
+
+                         /* Third, increment the cursor and reprint.  */
                     cursor[e]++;
                     scratch = TTF_RenderText_Solid(fnt30, "_", hue[e]);
                     SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
@@ -5865,8 +5871,16 @@ process()
                 scratch = TTF_RenderText_Solid(fnt30, "_", white);
                 SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
                 SDL_FreeSurface(scratch);
+
+                        /* Second, reprint original character.  */
+                z[0] = display_line[e][cursor[e]];
+                scratch = TTF_RenderText_Solid(fnt30, &z[0], hue[e]);
+                SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
+                SDL_FreeSurface(scratch);
                 
-                        /* Second, decrement the cursor and reprint.  */
+
+
+                        /* Third, decrement the cursor and reprint.  */
                 cursor[e]--;
                 scratch = TTF_RenderText_Solid(fnt30, "_", hue[e]);
                 SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
@@ -6070,7 +6084,13 @@ process()
                  SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);
                  SDL_FreeSurface(scratch);
              
-                 /* Second, increment the cursor and reprint.  */                 
+                        /* Second, reprint the original letter.  */ 
+                 z[0] = display_line[e][cursor[e]];
+                 scratch = TTF_RenderText_Solid(fnt40, &z[0], hue[e]);
+                 SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
+                 SDL_FreeSurface(scratch);
+
+                 /* Third, increment the cursor and reprint.  */                 
                  cursor[e]++;
                  scratch = TTF_RenderText_Solid(fnt40, "_", hue[e]);
                  SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
@@ -6088,7 +6108,13 @@ process()
                  SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
                  SDL_FreeSurface(scratch);
              
-                 /* Second, decrement cursor and reprint.  */
+                 /* Second, reprint original character.  */
+                 z[0] = display_line[e][cursor[e]];
+                 scratch = TTF_RenderText_Solid(fnt40, &z[0], hue[e]);
+                 SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
+                 SDL_FreeSurface(scratch);
+                
+                 /* Third, decrement cursor and reprint.  */
                  cursor[e]--;
                  scratch = TTF_RenderText_Solid(fnt40, "_", hue[e]);
                  SDL_BlitSurface(scratch, NULL, glass, &tile[e][cursor[e]]);         
